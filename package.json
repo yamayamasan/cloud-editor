@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "main": "main.js",
   "license": "MIT",
-  "script": {
-    "start": "node server.js"
+  "scripts": {
+    "start": "node new_server.js",
+    "setup" : "npm install && bower install"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
