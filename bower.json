@@ -1,0 +1,27 @@
+{
+  "name": "cloud-editor",
+  "description": "",
+  "main": "main.js",
+  "authors": [
+    "suzuki <sliker.kiley@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "AdminLTE": "admin-lte#^2.3.8",
+    "ace-builds": "^1.2.6",
+    "angular": "^1.5.9",
+    "angular-route": "^1.5.9",
+    "jquery-ui": "^1.12.1",
+    "jquery.cookie": "jquery-cookie#^1.4.1",
+    "jquery.dynatree": "dynatree#^1.2.8",
+    "jqueryfiletree": "^2.1.4"
+  }
+}

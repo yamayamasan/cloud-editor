@@ -1,0 +1,28 @@
+{
+  "History": {
+    "name": "History",
+    "primaryKey": "uuid",
+    "properties": {
+      "uuid": {"type": "string"},
+      "file": {"type": "string"},
+      "file_uuid": {"type": "string", "optional": true},
+      "auther": {"type": "string", "optional": true},
+      "version": {"type": "int", "optional": true},
+      "created_at": {"type": "date"},
+      "updated_at": {"type": "date"}
+    }
+  },
+  "TerminalUser": {
+    "name": "TerminalUser",
+    "primaryKey": "uuid",
+    "properties": {
+      "uuid": {"type": "string"},
+      "user": {"type": "string", "optional": true},
+      "user_id": {"type": "int", "optional": true},
+      "term_pid": {"type": "string", "optional": true},
+      "active": {"type": "bool", "optional": true},
+      "created_at": {"type": "date"},
+      "updated_at": {"type": "date"}
+    }
+  }
+}
