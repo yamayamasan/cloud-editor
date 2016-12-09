@@ -1,9 +1,9 @@
 {
   "name": "cloud-editor",
   "description": "",
-  "main": "main.js",
+  "main": "server.js",
   "authors": [
-    "suzuki <sliker.kiley@gmail.com>"
+    "suzuki <ya.ma.nds@gmail.com>"
   ],
   "license": "MIT",
   "homepage": "",
