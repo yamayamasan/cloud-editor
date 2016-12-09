@@ -21,7 +21,6 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
   });
 
   $scope.init = function() {
-    console.log('terminal');
     createTerminal();
   };
 
@@ -29,22 +28,23 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
     while (terminal.children.length) {
       terminal.removeChild(terminal.children[0]);
     }
-    term = new Terminal();
     var protocol = (location.protocol === 'https') ? 'wss://' : 'ws://';
     var socketURL = protocol + location.hostname + ((location.port)? (':' + location.port) : '') + '/terminals/';
+    var endpoint = '/terminals?cols='+termOpts.cols+'&rows='+termOpts.rows;
+
+    term = new Terminal();
     term.open(terminal);
     term.fit();
 
-    var endpoint = '/terminals?cols='+termOpts.cols+'&rows='+termOpts.rows;
-    UtilSrv.postHttp(endpoint, {}, function(res){
+    UtilSrv.http.post(endpoint).then(function(res){
       console.log(res);
       termPid = res.pid;
       socketURL += termPid;
       console.log(socketURL);
       socket = new WebSocket(socketURL);
       socket.onopen = runRealTerminal;
-      socket.onclose = runFakeTerminal;
-      socket.onerror = runFakeTerminal;
+      socket.onclose = closeTerminal;
+      socket.onerror = errorTerminal;
       socket.onmessage = function(e) {
         console.log(e);
       }
@@ -56,8 +56,12 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
     term._initialized = true;
   };
 
-  var runFakeTerminal = function() {
-    console.log('error');
+  var closeTerminal = function() {
+    console.log('close');
+  };
+
+  var errorTerminal = function() {
+    console.error('error');
   };
 
 }]);
