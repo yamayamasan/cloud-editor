@@ -44,6 +44,12 @@ APP.service('UtilSrv', ['$http', function($http) {
           },
           transformRequest: function(data) { return $.param(data); }
         });
+      },
+      getJson: function(path, cb) {
+        var http = new XMLHttpRequest();
+        http.open('GET', path)
+        http.onload = cb;
+        http.send(null);
       }
     }
   };

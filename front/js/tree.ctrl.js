@@ -4,7 +4,8 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
   };
 
   $scope.loadTree = function() {
-    UtilSrv.getHttp('/tree', {}, function(res) {
+    UtilSrv.http.getJson('/tree', function() {
+      var res = JSON.parse(this.responseText);
       $('#left').dynatree({
         onActivate: function(node) {
           if (node.data.isFolder) return;

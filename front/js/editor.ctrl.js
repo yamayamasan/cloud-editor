@@ -7,6 +7,7 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
 
   $scope.init = function() {
     var height = UtilSrv.get('index:height');
+
     $('#left').css('height', height - 80);
     $('#editor').css('height', height - 80 -40);
     // $scope.modelist = AceSrv.modeList();
@@ -38,7 +39,7 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
   $scope.save = function() {
     var filepath = UtilSrv.get('editor:opend.fil');
     if (angular.equals(filepath, 'newfile')) {
-    
+
     } else {
       UtilSrv.http.post('/filepath',{
        path: filepath,
