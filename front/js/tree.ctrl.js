@@ -9,9 +9,9 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
       $('#left').dynatree({
         onActivate: function(node) {
           if (node.data.isFolder) return;
-          UtilSrv.set('open_file', node.data.fullpath);
-          var ext = UtilSrv.ext(node.data.fullpath);
-          if (ext == 'json') {
+          UtilSrv.set('tree:openfile', node.data.fullpath);
+          var file = UtilSrv.getFileExt(node.data.fullpath);
+          if (file.ext === 'json') {
             $scope.openJsonFile(node.data.fullpath);
           } else {
             $scope.openFile(node.data.fullpath);
@@ -27,21 +27,23 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
   };
 
   $scope.openJsonFile = function(path) {
-    UtilSrv.getJson('/filepath/?p=' + path,  function(res){
-      $scope.$emit('load:file', res);
+    UtilSrv.http.getJson('/filepath/?p=' + path,  function(res){
+      $scope.$emit('load:file', {
+        data: this.responseText
+      });
     });
   };
 
   $scope.openFile = function(path) {
-    UtilSrv.getHttp('/filepath', {
+    UtilSrv.http.get('/filepath', {
       p: path
-    }, function(res) {
+    }).then(function(res){
       $scope.$emit('load:file', res);
       if (path.split('.').length > 0) {
         var arr = path.split('/');
         $scope.$emit('load:file:name', arr[arr.length - 1]);
       }
-    }, function(){
+    }, function(err){
       $scope.$emit('nof:on', {
         title: 'Failed Open File',
         msg: 'Failed Open File:[' + path + ']'

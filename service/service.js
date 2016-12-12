@@ -1,5 +1,6 @@
 'use strict';
 
+const _            = require('lodash');
 const fs           = require('fs');
 const fsExtra      = require('fs-extra');
 const nodeUuid     = require('node-uuid');
@@ -15,12 +16,17 @@ const HIS_DIR = `${__dirname}/../history`;
 const terminals = {};
 const logs = {};
 
+const init = function() {
+  const users = terminalUser.activeUsers();
+  terminalUser.unActives(users);
+};
+
 const postTerminals = function *() {
   const term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
     name: 'xterm-color',
     cols: 80,
     rows: 24,
-    cwd: process.env.pwd,
+    cwd: config.home || process.env.HOME,
     env: process.env
   });
   terminals[term.pid] = term;
@@ -33,24 +39,36 @@ const postTerminals = function *() {
   const userId = 1;
   terminalUser.active(nodeUuid.v4(), user, userId, term.pid);
 
-  this.body = {pid: term.pid.toString()};
+  const users = terminalUser.activeUsers();
+  this.body = JSON.stringify({
+    pid: term.pid.toString(),
+    active_users: users
+  });
 };
 
 const allTerminalsPid = function *(pid, next) {
   const term = terminals[parseInt(pid)];
-
+  /*
+  const sockets = (data) => {
+    this.websocket.send(JSON.stringify({active_users: data}));
+  };
   terminalUser.ext((_this) => {
-    _this.realm.objects('TerminalUser').addListener((p, c) => {
-      c.insertions.forEach((idx) => {
-        console.log('ist', p[idx]);
+    _this.realm.objects('TerminalUser').filtered('active == true').addListener((p, c) => {
+      c.insertions.forEach((val, idx) => {
+        if (idx === c.insertions.length - 1) {
+          sockets(p);
+        }
       });
-
-      c.modifications.forEach((idx) => {
-        console.log('mod', p[idx]);
+    });
+    _this.realm.objects('TerminalUser').filtered('active == false').addListener((p, c) => {
+      c.modifications.forEach((val, idx) => {
+        if (idx === c.modifications.length - 1) {
+//          sockets(p);
+        }
       });
     });
   });
-
+  */
   this.websocket.send(logs[term.pid]);
   term.on('data', (data) => {
     try {
@@ -119,6 +137,7 @@ const getTree = function *(next){
 };
 
 module.exports = {
+  init: init,
   terminals: {
     post: postTerminals
   },

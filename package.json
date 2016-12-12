@@ -4,8 +4,8 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "start": "node new_server.js",
-    "setup" : "npm install && bower install"
+    "start": "pm2 start server.js --name 'cloud-editor'",
+    "setup": "npm install && bower install && npm -g install pm2"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
@@ -25,5 +25,8 @@
     "pty.js": "^0.3.1",
     "realm": "^0.15.0",
     "xterm": "^2.2.1"
+  },
+  "devDependencies": {
+    "commander": "^2.9.0"
   }
 }

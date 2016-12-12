@@ -16,7 +16,7 @@ APP.service('UtilSrv', ['$http', function($http) {
     },
     getFileExt: function(file){
       var fileArray = file.split('/').pop().split('.');
-      if (fileArray.length > 2) {
+      if (fileArray.length > 1) {
         var ext = fileArray.pop();
         var file = fileArray.join('.');
         return {
@@ -24,7 +24,10 @@ APP.service('UtilSrv', ['$http', function($http) {
           ext: ext
         };
       }
-      return null;
+     return {
+      file: fileArray[0],
+      ext: null
+     };
     },
     http: {
       get: function(path, params) {
@@ -35,15 +38,32 @@ APP.service('UtilSrv', ['$http', function($http) {
         });
       },
       post: function(path, params) {
+        console.log(params);
+        var config = {
+          method: 'POST',
+          url: path,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          },
+        };
+        if (params) {
+          config.data = params;
+          config.transformRequest = function(data) { 
+            return $.param(data); 
+          }
+        }
+        return $http(config);
+        /*
         return $http({
           method: 'POST',
           url: path,
-          data: params || null,
+          data: params || url,
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
           },
           transformRequest: function(data) { return $.param(data); }
         });
+        */
       },
       getJson: function(path, cb) {
         var http = new XMLHttpRequest();

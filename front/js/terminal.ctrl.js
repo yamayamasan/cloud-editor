@@ -13,7 +13,7 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
   var socket = null;
 
   $rootScope.$on('$routeChangeSuccess', function(ev, toState, fromState){
-    if (toState.loadedTemplateUrl !== 'views/terminal.html') {
+    if (socket && toState.loadedTemplateUrl !== 'views/terminal.html') {
       socket.close(4500);
       termPid = null;
       socket = null;
@@ -37,16 +37,25 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
     term.fit();
 
     UtilSrv.http.post(endpoint).then(function(res){
-      console.log(res);
-      termPid = res.pid;
+      termPid = res.data.pid;
       socketURL += termPid;
-      console.log(socketURL);
       socket = new WebSocket(socketURL);
       socket.onopen = runRealTerminal;
       socket.onclose = closeTerminal;
       socket.onerror = errorTerminal;
       socket.onmessage = function(e) {
-        console.log(e);
+        /*
+        if (e.data.match(/active_users/)) {
+          var data = JSON.parse(e.data);
+          console.log(data);
+          return true;
+        }
+        var data = JSON.parse(e.data);
+        if (.actives) {
+          console.log(data);
+          return;
+        }
+        */
       }
     });
   };

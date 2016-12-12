@@ -6,4 +6,7 @@ APP.controller('IndexCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
     UtilSrv.set('index:height', $(window).height());
   };
 
+  $scope.$on('load:file', function(e, a){
+    $scope.$broadcast('open:file', a.data);
+  });
 }]);

@@ -54,11 +54,21 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
   };
 
   $scope.$on('open:file', function(e, args){
-    AceSrv.immed().setValue(args, -1);
+    AceSrv.immed().setValue(toStr(args), -1);
   });
 
   var openNewfile = function() {
     AceSrv.immed().setValue('', -1);
     UtilSrv.set('editor:opend.file', 'newfile');
+  };
+
+  var toStr = function(org) {
+    var r = org;
+    switch (typeof org) {
+      case 'object':
+        r = JSON.stringify(org, undefined, 2);
+      break;
+    }
+    return r;
   };
 }]);
