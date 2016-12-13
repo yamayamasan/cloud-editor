@@ -3,7 +3,7 @@
 const _            = require('lodash');
 const fs           = require('fs');
 const fsExtra      = require('fs-extra');
-const nodeUuid     = require('node-uuid');
+const uuid         = require('uuid');
 const pty          = require('pty.js');
 const tree         = require('../lib/filelist2json.js');
 // const tree         = require('../lib/n_filelist2json.js');
@@ -38,7 +38,7 @@ const postTerminals = function *() {
 
   const user = 'user';
   const userId = 1;
-  terminalUser.active(nodeUuid.v4(), user, userId, term.pid);
+  terminalUser.active(uuid.v4(), user, userId, term.pid);
 
   const users = terminalUser.activeUsers();
   this.body = JSON.stringify({
@@ -110,7 +110,7 @@ const postFilePath = function *(next){
   const path = this.request.body.path;
   const text = this.request.body.data;
   if (path) {
-    const uuid = nodeUuid.v4();
+    const uuid = uuid.v4();
 
     const lastItem = history.lastVer(path);
 

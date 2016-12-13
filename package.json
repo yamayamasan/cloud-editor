@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "pm2 start server.js --name 'cloud-editor'",
-    "setup": "npm install && bower install && npm -g install pm2"
+    "setup": "npm install && bower install ./front && npm -g install pm2"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
@@ -23,9 +23,9 @@
     "koa-websocket": "^2.1.0",
     "lodash": "^4.17.2",
     "mkdirp": "^0.5.1",
-    "node-uuid": "^1.4.7",
     "pty.js": "^0.3.1",
     "realm": "^0.15.0",
+    "uuid": "^3.0.1",
     "xterm": "^2.2.1"
   },
   "devDependencies": {
