@@ -22,6 +22,7 @@
     "jquery-ui": "^1.12.1",
     "jquery.cookie": "jquery-cookie#^1.4.1",
     "jquery.dynatree": "dynatree#^1.2.8",
-    "jqueryfiletree": "^2.1.4"
+    "jqueryfiletree": "^2.1.4",
+    "xterm.js": "^2.2.1"
   }
 }
