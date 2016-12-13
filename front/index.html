@@ -11,13 +11,15 @@
     <link href="bower_components/AdminLTE/dist/css/skins/_all-skins.min.css" rel="stylesheet">
     <link href="bower_components/jquery.dynatree/dist/skin/ui.dynatree.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link href="xterm/xterm.css" rel="stylesheet">
+    <link href="bower_components/xterm.js/dist/xterm.css" rel="stylesheet">
+    <link href="bower_components/xterm.js/dist/addons/fullscreen/fullscreen.css" rel="stylesheet">
+    <link href="bower_components/AdminLTE/plugins/select2/select2.min.css" rel="stylesheet">
 
     <link href="css/style.css" rel="stylesheet">
 
   </head>
 
-  <body class="skin-blue">
+  <body class="skin-blue" class="ng-cloak" ng-cloak>
     <div class="wrapper" ng-controller="IndexCtrl" ng-init="init()">
       <header class="main-header">
         <a class="logo">
@@ -42,6 +44,14 @@
         </nav>
       </header>
 
+      <div class="row notification-box" ng-if="nof.view">
+        <div class="col-md-6 col-md-offset-6 notification-body">
+          <div class="callout callout-success">
+            <h4>{{ nof.title }}</h4>
+            <p>{{ nof.msg }}</p>
+          </div>
+        </div>
+      </div>
 
       <div class="content-wrapper" ng-view></div>
     </div>
@@ -49,16 +59,23 @@
     <!-- script -->
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
-    <script src="xterm/xterm.js"></script>
-    <script src="xterm/addons/attach/attach.js"></script>
-    <script src="xterm/addons/fit/fit.js"></script>
+    <script src="bower_components/xterm.js/dist/xterm.js"></script>
+    <script src="bower_components/xterm.js/dist/addons/attach/attach.js"></script>
+    <script src="bower_components/xterm.js/dist/addons/fit/fit.js"></script>
+    <script src="bower_components/xterm.js/dist/addons/fullscreen/fullscreen.js"></script>
 
     <script src="bower_components/ace-builds/src-min/ace.js"></script>
+    <script src="bower_components/ace-builds/src-min/ext-modelist.js"></script>
+    <script src="bower_components/ace-builds/src-min/ext-themelist.js"></script>
+    <script src="bower_components/ace-builds/src-min/ext-language_tools.js"></script>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="bower_components/jquery.cookie/jquery.cookie.js"></script>
     <script src="bower_components/jquery.dynatree/dist/jquery.dynatree.min.js"></script>
+    <script src="bower_components/AdminLTE/plugins/select2/select2.min.js"></script>
+    <script src="bower_components/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/init.js"></script>
     <script src="js/ace-service.js"></script>
     <script src="js/util-service.js"></script>
@@ -66,5 +83,6 @@
     <script src="js/tree.ctrl.js"></script>
     <script src="js/editor.ctrl.js"></script>
     <script src="js/terminal.ctrl.js"></script>
+    <script src="js/directive.js"></script>
   </body>
 </html>

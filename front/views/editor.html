@@ -4,18 +4,55 @@
   </section>
 </aside>
 
-<div class="row" ng-init='init()'>
+<div class="row" ng-init='init()' style="margin-left: 0">
   <div class="col-md-12">
+    <div class="row" style="height: 40px">
+      <div class="btn-group">
+        <button href="" ng-click="newfile()" class="btn btn-default">
+          <i class="fa fa-file-text-o"></i>
+        </button>
+        <button href="" ng-click="save()" class="btn btn-default">
+          <i class="fa fa-save"></i>
+        </button>
+        <button href="" ng-click="modal()" class="btn btn-default">
+          <i class="fa fa-save"></i>
+        </button>
+      </div>
+      <label for="modelist">
+        <select class="js-states form-control" id="modelist" ng-model="sldmode.name">
+          <option ng-repeat="mode in modelist.modes" value="{{mode.name}}" >{{ mode.caption }}</option>
+        </select>
+      </label>
+    </div>
     <div class="row">
-      <div class="col-md-10">
+      <div class="col-md-9">
         <div id="editor"></div>
       </div>
 
-      <div class="col-md-2"></div>
-    </div>
-
-    <div class="row" style="height: 40px">
-      
+      <div class="col-md-3">
+        <div class="row">
+        <div class="col-md-10">
+          <div class="box box-solid box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Setting</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              </div>
+            </div> 
+            <div class="box-body" style="display: block;">
+             <label for="themelist">
+               theme
+               <select class="js-states form-control" id="themelist" ng-model="sldtheme">
+                 <option ng-repeat="theme in themelist.themes" value="{{theme.name}}" >{{ theme.caption }}</option>
+               </select>
+             </label>
+            </div><!-- box-body -->
+          </div><!-- box -->
+          </div><!-- box -->
+        </div><!-- row -->
+      </div>
     </div>
   </div>
 </div>
+
+<div modal-include="views/modal.html"></div>

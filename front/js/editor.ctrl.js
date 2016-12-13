@@ -4,16 +4,22 @@
 APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function($scope, $timeout, UtilSrv, AceSrv) {
 
   var editor = null;
+  $scope.sldmode = {
+    name: null,
+    object: null
+  };
+  $scope.sldtheme = null;
 
   $scope.init = function() {
     var height = UtilSrv.get('index:height');
-
-    $('#left').css('height', height - 80);
-    $('#editor').css('height', height - 80 -40);
-    // $scope.modelist = AceSrv.modeList();
-    // $scope.themelist = AceSrv.themeList();
+    $('#editor').css('height', height - 91);
+    $('.sidebar').slimScroll({
+      height: height - 40
+    });
+    $scope.modelist = AceSrv.modeList();
+    $scope.themelist = AceSrv.themeList();
     /*
-    $timeout(() => {
+    $timeout(function() {
       $('#modelist').select2();
     }, 300);
     */
@@ -22,7 +28,7 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
 
   $scope.remove = function() {
     UtilSrv.http.post('remove', {
-      path: UtilSrv.get('open_file')
+      path: UtilSrv.get('editor:open.file')
     }).then(function(res){
       $scope.$emit('nof:on', {
         title: 'Remove File',
@@ -36,8 +42,12 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
     openNewfile();
   };
 
+  $scope.modal = function() {
+    $('#modal').modal();
+  };
+
   $scope.save = function() {
-    var filepath = UtilSrv.get('editor:opend.fil');
+    var filepath = UtilSrv.get('editor:opend.file');
     if (angular.equals(filepath, 'newfile')) {
 
     } else {
@@ -53,8 +63,28 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
     }
   };
 
+  $scope.$watch('sldmode', function(e){
+    if (e.object === null) return;
+    AceSrv.immed().getSession().setMode(e.object.mode);
+  });
+
+  $scope.$watch('sldtheme', function(e){
+    if (e === null) return;
+    var theme = $scope.themelist.themesByName[e];
+    AceSrv.immed().setTheme(theme.theme);
+  });
+
   $scope.$on('open:file', function(e, args){
-    AceSrv.immed().setValue(toStr(args), -1);
+    var path = UtilSrv.get('editor:opend.file');
+    var mode = AceSrv.getModePath(path);
+    // http://blog.all-in.xyz/2015/12/26/understanding-angulars-apply-and-digest/
+    $scope.$evalAsync(function() {
+      $scope.sldmode = {
+        name: mode.name,
+        object: mode
+      };
+      AceSrv.immed().setValue(toStr(args.data), -1);
+    });
   });
 
   var openNewfile = function() {

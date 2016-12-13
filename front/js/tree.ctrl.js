@@ -1,4 +1,6 @@
 APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
+  $scope.dirChildren = null;
+
   $scope.init = function() {
     $scope.loadTree();
   };
@@ -6,10 +8,12 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
   $scope.loadTree = function() {
     UtilSrv.http.getJson('/tree', function() {
       var res = JSON.parse(this.responseText);
+      $scope.dirChildren = res.children;
       $('#left').dynatree({
         onActivate: function(node) {
-          if (node.data.isFolder) return;
-          UtilSrv.set('tree:openfile', node.data.fullpath);
+          // if (node.data.isFolder) return openDir(node);
+          if (node.data.isFolder) return ;
+          UtilSrv.set('editor:opend.file', node.data.fullpath);
           var file = UtilSrv.getFileExt(node.data.fullpath);
           if (file.ext === 'json') {
             $scope.openJsonFile(node.data.fullpath);
@@ -18,7 +22,7 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
           }
         },
         persist: false,
-        children: res.children
+        children:$scope.dirChildren
       });
     }, function(status, err){
       console.log(status);
@@ -29,6 +33,7 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
   $scope.openJsonFile = function(path) {
     UtilSrv.http.getJson('/filepath/?p=' + path,  function(res){
       $scope.$emit('load:file', {
+        path: path,
         data: this.responseText
       });
     });
@@ -38,7 +43,10 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
     UtilSrv.http.get('/filepath', {
       p: path
     }).then(function(res){
-      $scope.$emit('load:file', res);
+      $scope.$emit('load:file', {
+        path: path,
+        data: res.data
+      });
       if (path.split('.').length > 0) {
         var arr = path.split('/');
         $scope.$emit('load:file:name', arr[arr.length - 1]);
@@ -48,6 +56,18 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
         title: 'Failed Open File',
         msg: 'Failed Open File:[' + path + ']'
       });
+    });
+  };
+
+  var openDir = function(node) {
+    UtilSrv.http.get('/opendir', {
+      p: node.data.fullpath
+    }).then(function(res){
+      $(node.li).dynatree({
+        childList: res.data.children,
+        persist: false
+      });
+      node.render();
     });
   };
 

@@ -6,6 +6,7 @@ const fsExtra      = require('fs-extra');
 const nodeUuid     = require('node-uuid');
 const pty          = require('pty.js');
 const tree         = require('../lib/filelist2json.js');
+// const tree         = require('../lib/n_filelist2json.js');
 const history      = require('../models/history.js');
 const terminalUser = require('../models/terminalUser.js');
 
@@ -97,6 +98,14 @@ const getFilePath = function *(next){
    yield next;
 };
 
+// deprecated
+const getOpenDir = function *(next) {
+   const dirpath = this.query.p;
+   const list = yield  tree(dirpath);
+   this.body = list;
+   yield next;
+};
+
 const postFilePath = function *(next){
   const path = this.request.body.path;
   const text = this.request.body.data;
@@ -145,6 +154,9 @@ module.exports = {
   filePath: {
     get: getFilePath,
     post: postFilePath
+  },
+  openDir: {
+    get: getOpenDir
   },
   tree: {
     get: getTree

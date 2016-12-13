@@ -1,5 +1,9 @@
 {
   "port": 8919,
   "dir": "/home/as-smt/Devs/src/php/attendance-management/ams",
-  "home": null
+  "home": null,
+  "basic": {
+    "name": "admin",
+    "pass": "pass"
+  }
 }
