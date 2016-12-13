@@ -16,8 +16,7 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
     $('.sidebar').slimScroll({
       height: height - 40
     });
-    $scope.modelist = AceSrv.modeList();
-    $scope.themelist = AceSrv.themeList();
+    initSettings();
     /*
     $timeout(function() {
       $('#modelist').select2();
@@ -86,6 +85,11 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
       AceSrv.immed().setValue(toStr(args.data), -1);
     });
   });
+
+  var initSettings = function() {
+    $scope.modelist = AceSrv.modeList();
+    $scope.themelist = AceSrv.themeList();
+  }
 
   var openNewfile = function() {
     AceSrv.immed().setValue('', -1);

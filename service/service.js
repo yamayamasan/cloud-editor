@@ -5,10 +5,12 @@ const fs           = require('fs');
 const fsExtra      = require('fs-extra');
 const uuid         = require('uuid');
 const pty          = require('pty.js');
+const EventEmitter = require('events').EventEmitter;
 const tree         = require('../lib/filelist2json.js');
 // const tree         = require('../lib/n_filelist2json.js');
 const history      = require('../models/history.js');
 const terminalUser = require('../models/terminalUser.js');
+const ev           = new EventEmitter();
 
 const config = require('../config/config.json');
 const DIR = config.dir;
@@ -49,6 +51,7 @@ const postTerminals = function *() {
 
 const allTerminalsPid = function *(pid, next) {
   const term = terminals[parseInt(pid)];
+  
   /*
   const sockets = (data) => {
     this.websocket.send(JSON.stringify({active_users: data}));
@@ -57,7 +60,8 @@ const allTerminalsPid = function *(pid, next) {
     _this.realm.objects('TerminalUser').filtered('active == true').addListener((p, c) => {
       c.insertions.forEach((val, idx) => {
         if (idx === c.insertions.length - 1) {
-          sockets(p);
+          ev.emit('addActiveUsers', p);
+          // sockets(p);
         }
       });
     });
@@ -70,6 +74,7 @@ const allTerminalsPid = function *(pid, next) {
     });
   });
   */
+
   this.websocket.send(logs[term.pid]);
   term.on('data', (data) => {
     try {
@@ -145,6 +150,23 @@ const getTree = function *(next){
   yield next;
 };
 
+const getEvent = function *(next) {
+  terminalUser.ext((_this) => {
+    _this.realm.objects('TerminalUser').filtered('active == true').addListener((p, c, d) => {
+      if (c.insertions.length > 0) {
+      }
+      if (c.modifications.length > 0) {
+      }
+    });
+  });
+
+  this.websocket.on('message', (msg) => {
+    this.body = msg;
+  });
+  this.websocket.on('close', () => {
+  });
+};
+
 module.exports = {
   init: init,
   terminals: {
@@ -160,5 +182,8 @@ module.exports = {
   },
   tree: {
     get: getTree
+  },
+  event: {
+    get: getEvent
   }
 };

@@ -5,6 +5,7 @@ APP.service('AceSrv', [function() {
   var editor = null;
   var modeList = null;
   var themeList = null;
+  var keyBindsList = null;
 
   // https://github.com/ajaxorg/ace/blob/master/demo/modelist.html
   return {
@@ -32,6 +33,11 @@ APP.service('AceSrv', [function() {
       if (themeList !== null) return themeList;
       themeList = ace.require('ace/ext/themelist');
       return themeList;
+    },
+    keyBindsList: function() {
+      if (keyBindsList !== null) return keyBindsList;
+      keyBindsList = ace.require('ace/ext/keybinding_menu');
+      return keyBindsList;
     },
     immed: function() {
       return editor;

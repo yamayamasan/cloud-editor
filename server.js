@@ -25,7 +25,8 @@ const routes = [
   route.get('/filepath', srv.filePath.get),
   route.post('/filepath', srv.filePath.post),
   route.get('/openDir', srv.openDir.get),
-  route.get('/tree', srv.tree.get)
+  route.get('/tree', srv.tree.get),
+ // route.get('/event', srv.event.get)
 ];
 
 routes.map((_route) => {app.use(_route);});
@@ -48,6 +49,7 @@ app.use(function *(next){
 app.use(basicauth(config.basic));
 // websocket
 app.ws.use(route.all('/terminals/:pid', srv.terminalsPid));
+app.ws.use(route.get('/event', srv.event.get));
 
 app.use(compress());
 app.use(serve(`${__dirname}/front/`));

@@ -1,7 +1,7 @@
 'use strict';
 
 
-APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', function($scope, $timeout, $rootScope, UtilSrv) {
+APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', 'EveSrcSrv', function($scope, $timeout, $rootScope, UtilSrv, EveSrcSrv) {
 
   var terminal = document.getElementById('terminal');
   var term = null;
@@ -11,6 +11,9 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
   };
   var termPid = null;
   var socket = null;
+  var event = null;
+
+  $scope.activeUsers = null;
 
   $rootScope.$on('$routeChangeSuccess', function(ev, toState, fromState){
     if (socket && toState.loadedTemplateUrl !== 'views/terminal.html') {
@@ -22,14 +25,38 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
 
   $scope.init = function() {
     createTerminal();
+    eventWs();
+  };
+
+  var eventWs = function() {
+    var protocol= getWsProtcol();
+    var socketURL = getWsUrl(protocol, '/event/');
+    event = new WebSocket(socketURL);
+    event.onmessage = function(ev) {
+      var data = JSON.parse(ev.data, undefined);
+      if (data.active_users) {
+        var users = [];
+        angular.forEach(data.active_users, function(val, key){
+          users.push(val);
+        });
+        $scope.$evalAsync(function(){
+          console.log(users);
+          $scope.activeUsers = users;
+        });
+      }
+    };
   };
 
   var createTerminal = function() {
     while (terminal.children.length) {
       terminal.removeChild(terminal.children[0]);
     }
+    var protocol= getWsProtcol();
+    var socketURL = getWsUrl(protocol, '/terminals/');
+    /*
     var protocol = (location.protocol === 'https') ? 'wss://' : 'ws://';
     var socketURL = protocol + location.hostname + ((location.port)? (':' + location.port) : '') + '/terminals/';
+    */
     var endpoint = '/terminals?cols='+termOpts.cols+'&rows='+termOpts.rows;
 
     term = new Terminal();
@@ -43,20 +70,6 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
       socket.onopen = runRealTerminal;
       socket.onclose = closeTerminal;
       socket.onerror = errorTerminal;
-      socket.onmessage = function(e) {
-        /*
-        if (e.data.match(/active_users/)) {
-          var data = JSON.parse(e.data);
-          console.log(data);
-          return true;
-        }
-        var data = JSON.parse(e.data);
-        if (.actives) {
-          console.log(data);
-          return;
-        }
-        */
-      }
     });
   };
 
@@ -71,6 +84,14 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', fu
 
   var errorTerminal = function() {
     console.error('error');
+  };
+
+  var getWsProtcol = function() {
+    return (location.protocol === 'https') ? 'wss://' : 'ws://';
+  };
+
+  var getWsUrl = function(protocol, path) {
+    return protocol + location.hostname + ((location.port)? (':' + location.port) : '') + path;
   };
 
 }]);
