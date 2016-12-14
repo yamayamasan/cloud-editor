@@ -51,29 +51,10 @@ const postTerminals = function *() {
 
 const allTerminalsPid = function *(pid, next) {
   const term = terminals[parseInt(pid)];
-  
-  /*
-  const sockets = (data) => {
-    this.websocket.send(JSON.stringify({active_users: data}));
-  };
-  terminalUser.ext((_this) => {
-    _this.realm.objects('TerminalUser').filtered('active == true').addListener((p, c) => {
-      c.insertions.forEach((val, idx) => {
-        if (idx === c.insertions.length - 1) {
-          ev.emit('addActiveUsers', p);
-          // sockets(p);
-        }
-      });
-    });
-    _this.realm.objects('TerminalUser').filtered('active == false').addListener((p, c) => {
-      c.modifications.forEach((val, idx) => {
-        if (idx === c.modifications.length - 1) {
-//          sockets(p);
-        }
-      });
-    });
+
+  fs.watch(`${__dirname}/../config/config.json`, (ev, fname) => {
+    console.log(ev, fname);
   });
-  */
 
   this.websocket.send(logs[term.pid]);
   term.on('data', (data) => {
@@ -83,7 +64,13 @@ const allTerminalsPid = function *(pid, next) {
       console.error(ex);
     }
   });
+  let line = '';
   this.websocket.on('message', (msg) => {
+    if (msg.match(/[\r|\r\n]/)) {
+      line = '';
+    } else {
+      line = `${line}${msg}`;
+    }
     term.write(msg);
   });
   this.websocket.on('close', () => {
@@ -106,7 +93,7 @@ const getFilePath = function *(next){
 // deprecated
 const getOpenDir = function *(next) {
    const dirpath = this.query.p;
-   const list = yield  tree(dirpath);
+   const list = yield tree(dirpath);
    this.body = list;
    yield next;
 };
@@ -142,6 +129,23 @@ const postFilePath = function *(next){
      }
     this.body = {'success': true};
     yield next;
+};
+
+const postExecCode = function *(next) {
+  const text = this.request.body.text;
+  const exec = require('child_process').execSync;
+
+  let r = null;
+  try {
+    fs.writeFileSync('/tmp/1234.js', text);
+    r = exec('node /tmp/1234.js');
+    r = r.toString();
+  } catch(e) {
+    r = e.stderr.toString();
+  } finally {
+    fs.unlinkSync('/tmp/1234.js');
+  }
+  this.body = r;
 };
 
 const getTree = function *(next){
@@ -182,6 +186,9 @@ module.exports = {
   },
   tree: {
     get: getTree
+  },
+  execCode: {
+    post: postExecCode
   },
   event: {
     get: getEvent

@@ -62,6 +62,15 @@ APP.controller('EditorCtrl', ['$scope','$timeout', 'UtilSrv','AceSrv', function(
     }
   };
 
+  $scope.exec = function() {
+    var text = AceSrv.immed().getValue();
+    UtilSrv.http.post('/exec_code', {
+      text: text
+    }).then(function(res){
+      console.log(res);
+    });
+  }
+
   $scope.$watch('sldmode', function(e){
     if (e.object === null) return;
     AceSrv.immed().getSession().setMode(e.object.mode);

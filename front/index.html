@@ -6,13 +6,13 @@
     <!--<base href="./" />-->
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    <link href="bower_components/xterm.js/dist/xterm.css" rel="stylesheet">
+    <link href="bower_components/xterm.js/dist/addons/fullscreen/fullscreen.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href="bower_components/AdminLTE/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="bower_components/AdminLTE/dist/css/AdminLTE.min.css" rel="stylesheet">
     <link href="bower_components/AdminLTE/dist/css/skins/_all-skins.min.css" rel="stylesheet">
     <link href="bower_components/jquery.dynatree/dist/skin/ui.dynatree.css" rel="stylesheet">
-    <link href="bower_components/xterm.js/dist/xterm.css" rel="stylesheet">
-    <link href="bower_components/xterm.js/dist/addons/fullscreen/fullscreen.css" rel="stylesheet">
     <link href="bower_components/AdminLTE/plugins/select2/select2.min.css" rel="stylesheet">
 
     <link href="css/style.css" rel="stylesheet">
@@ -30,6 +30,11 @@
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
               <li>
+                <a href="/#!/filebrowser">
+                  <i class="fa fa-folder-open-o"></i>
+                </a>
+              </li>
+              <li>
                 <a href="/#!/editor">
                   <i class="fa fa-edit"></i>
                 </a>
@@ -37,6 +42,11 @@
               <li>
                 <a href="/#!/terminal">
                   <i class="fa fa-terminal"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#" ng-click="openMemo()">
+                  <i class="fa fa-file-text-o"></i>
                 </a>
               </li>
             </ul>
@@ -84,7 +94,9 @@
     <script src="js/index.ctrl.js"></script>
     <script src="js/tree.ctrl.js"></script>
     <script src="js/editor.ctrl.js"></script>
+    <script src="js/settings.ctrl.js"></script>
     <script src="js/terminal.ctrl.js"></script>
+    <script src="js/filebrowser.ctrl.js"></script>
     <script src="js/directive.js"></script>
   </body>
 </html>

@@ -59,7 +59,9 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', 'E
     */
     var endpoint = '/terminals?cols='+termOpts.cols+'&rows='+termOpts.rows;
 
-    term = new Terminal();
+    term = new Terminal({
+      cursorBlink: true
+    });
     term.open(terminal);
     term.fit();
 

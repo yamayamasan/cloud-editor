@@ -9,6 +9,7 @@ APP.controller('TreeCtrl', ['$scope', 'UtilSrv', function($scope, UtilSrv) {
     UtilSrv.http.getJson('/tree', function() {
       var res = JSON.parse(this.responseText);
       $scope.dirChildren = res.children;
+      console.log(res.children);
       $('#left').dynatree({
         onActivate: function(node) {
           // if (node.data.isFolder) return openDir(node);

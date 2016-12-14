@@ -24,5 +24,19 @@
       "created_at": {"type": "date"},
       "updated_at": {"type": "date"}
     }
+  },
+  "User": {
+    "name": "User",
+    "primaryKey": "uuid",
+    "properties": {
+      "uuid": {"type": "string"},
+      "name": {"type": "string", "optional": true},
+      "password": {"type": "string", "optional": true},
+      "active": {"type": "bool", "optional": true},
+      "email": {"type": "string"},
+      "created_at": {"type": "date"},
+      "updated_at": {"type": "date"},
+      "deleted_at": {"type": "date", "optional": true}
+    }
   }
 }

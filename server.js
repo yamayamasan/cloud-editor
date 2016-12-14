@@ -26,6 +26,7 @@ const routes = [
   route.post('/filepath', srv.filePath.post),
   route.get('/openDir', srv.openDir.get),
   route.get('/tree', srv.tree.get),
+  route.post('/exec_code', srv.execCode.post),
  // route.get('/event', srv.event.get)
 ];
 
@@ -53,7 +54,6 @@ app.ws.use(route.get('/event', srv.event.get));
 
 app.use(compress());
 app.use(serve(`${__dirname}/front/`));
-app.use(serve(`bower_components/`));
 
 app.listen(config.port, () => {
   mkdirp(PROP_DIR, (err) => {
