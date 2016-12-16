@@ -8,6 +8,7 @@
     "setup": "npm install && bower install ./front && npm -g install pm2"
   },
   "dependencies": {
+    "bcrypt": "^1.0.1",
     "body-parser": "^1.15.2",
     "co": "^4.6.0",
     "express": "^4.14.0",
@@ -22,6 +23,7 @@
     "koa-static-server": "^1.0.0",
     "koa-websocket": "^2.1.0",
     "lodash": "^4.17.2",
+    "lokijs": "^1.4.1",
     "mkdirp": "^0.5.1",
     "pty.js": "^0.3.1",
     "realm": "^0.15.0",

@@ -38,7 +38,6 @@ APP.service('UtilSrv', ['$http', function($http) {
         });
       },
       post: function(path, params) {
-        console.log(params);
         var config = {
           method: 'POST',
           url: path,

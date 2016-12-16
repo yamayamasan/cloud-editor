@@ -6,5 +6,7 @@
     "name": "admin",
     "pass": "pass"
   },
-  "test": "test"
+  "auth": {
+    "rounds": 15
+  }
 }

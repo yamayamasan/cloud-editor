@@ -1,5 +1,6 @@
 'use strict';
 
+const _          = require('lodash');
 const koa        = require('koa');
 // const logger     = require('koa-logger');
 const compress   = require('koa-compress');
@@ -20,16 +21,29 @@ const PROP_DIR = `${__dirname}/history${config.dir}`;
 // app.use(logger());
 app.use(bodyParser());
 
+const routes = [];
+_.forEach(srv, (item, path) => {
+  if (path === 'init' || typeof item === 'function') return;
+  _.forEach(item, (fnc, method) => {
+    routes.push(route[method](`/${path}`, fnc));
+  });
+});
+
+/*
 const routes = [
   route.post('/terminals', srv.terminals.post),
-  route.get('/filepath', srv.filePath.get),
-  route.post('/filepath', srv.filePath.post),
-  route.get('/openDir', srv.openDir.get),
+  route.get('/filepath', srv.filepath.get),
+  route.post('/filepath', srv.filepath.post),
+  route.get('/openDir', srv.opendir.get),
   route.get('/tree', srv.tree.get),
-  route.post('/exec_code', srv.execCode.post),
+  route.post('/exec_code', srv.execcode.post),
+  route.get('/filetree', srv.filetree.get),
+  route.get('/dirtree', srv.dirtree.get),
+  route.get('/alltree', srv.alltree.get),
+  route.get('/me', srv.me.get),
  // route.get('/event', srv.event.get)
 ];
-
+*/
 routes.map((_route) => {app.use(_route);});
 // all
 app.use(function *(next){

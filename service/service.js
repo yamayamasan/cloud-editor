@@ -3,13 +3,15 @@
 const _            = require('lodash');
 const fs           = require('fs');
 const fsExtra      = require('fs-extra');
-const uuid         = require('uuid');
+const Uuid         = require('uuid');
 const pty          = require('pty.js');
 const EventEmitter = require('events').EventEmitter;
 const tree         = require('../lib/filelist2json.js');
+const toTree       = require('../lib/filelist.js');
 // const tree         = require('../lib/n_filelist2json.js');
 const history      = require('../models/history.js');
 const terminalUser = require('../models/terminalUser.js');
+const user         = require('../models/User.js');
 const ev           = new EventEmitter();
 
 const config = require('../config/config.json');
@@ -40,7 +42,7 @@ const postTerminals = function *() {
 
   const user = 'user';
   const userId = 1;
-  terminalUser.active(uuid.v4(), user, userId, term.pid);
+  terminalUser.active(Uuid.v4(), user, userId, term.pid);
 
   const users = terminalUser.activeUsers();
   this.body = JSON.stringify({
@@ -97,12 +99,30 @@ const getOpenDir = function *(next) {
    this.body = list;
    yield next;
 };
+const getFileTree = function *(next) {
+   const dirpath = this.query.p;
+   const totree = new toTree(dirpath);
+   this.body = totree.fileList();
+   yield next;
+};
+const getDirTree = function *(next) {
+   const dirpath = this.query.p;
+   const totree = new toTree(dirpath);
+   this.body = totree.dirList();
+   yield next;
+};
+const getAllTree = function *(next) {
+   const dirpath = this.query.p;
+   const totree = new toTree(dirpath);
+   this.body = totree.allList();
+   yield next;
+};
 
 const postFilePath = function *(next){
   const path = this.request.body.path;
   const text = this.request.body.data;
   if (path) {
-    const uuid = uuid.v4();
+    const uuid = Uuid.v4();
 
     const lastItem = history.lastVer(path);
 
@@ -154,6 +174,32 @@ const getTree = function *(next){
   yield next;
 };
 
+const postRegister = function *(next) {
+  const params = this.request.body;
+  const token = user.add(Uuid.v4(), 'none', params.password, params.email);
+
+  this.body = JSON.stringify({
+    'success': true,
+    'token': token,
+  });
+  yield next;
+};
+
+const postLogin = function *(next) {
+  const params = this.request.body;
+  const token = user.login(params.password, params.email);
+
+  this.body = JSON.stringify({
+    'success': true,
+    'token': token,
+  });
+  yield next;
+};
+
+const getMe = function *(next) {
+
+};
+
 const getEvent = function *(next) {
   terminalUser.ext((_this) => {
     _this.realm.objects('TerminalUser').filtered('active == true').addListener((p, c, d) => {
@@ -177,17 +223,35 @@ module.exports = {
     post: postTerminals
   },
   terminalsPid: allTerminalsPid,
-  filePath: {
+  filepath: {
     get: getFilePath,
     post: postFilePath
   },
-  openDir: {
+  filetree: {
+    get: getFileTree
+  },
+  dirtree: {
+    get: getDirTree
+  },
+  alltree: {
+    get: getAllTree
+  },
+  opendir: {
     get: getOpenDir
   },
   tree: {
     get: getTree
   },
-  execCode: {
+  regist: {
+    post: postRegister
+  },
+  login: {
+    post: postLogin
+  },
+  me: {
+    get: getMe
+  },
+  execcode: {
     post: postExecCode
   },
   event: {

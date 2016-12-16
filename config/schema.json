@@ -34,6 +34,8 @@
       "password": {"type": "string", "optional": true},
       "active": {"type": "bool", "optional": true},
       "email": {"type": "string"},
+      "token": {"type": "string", "optional": true},
+      "is_delete": {"type": "bool", "default": false},
       "created_at": {"type": "date"},
       "updated_at": {"type": "date"},
       "deleted_at": {"type": "date", "optional": true}

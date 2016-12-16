@@ -1,7 +1,8 @@
 'use strict';
 
 
-APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', 'EveSrcSrv', function($scope, $timeout, $rootScope, UtilSrv, EveSrcSrv) {
+APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', 'EveSrcSrv', 
+    function($scope, $timeout, $rootScope, UtilSrv, EveSrcSrv) {
 
   var terminal = document.getElementById('terminal');
   var term = null;
@@ -12,12 +13,13 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', 'E
   var termPid = null;
   var socket = null;
   var event = null;
+  var CLOSE_CODE = 4500;
 
   $scope.activeUsers = null;
 
   $rootScope.$on('$routeChangeSuccess', function(ev, toState, fromState){
     if (socket && toState.loadedTemplateUrl !== 'views/terminal.html') {
-      socket.close(4500);
+      socket.close(CLOSE_CODE);
       termPid = null;
       socket = null;
     }
@@ -53,10 +55,6 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', 'E
     }
     var protocol= getWsProtcol();
     var socketURL = getWsUrl(protocol, '/terminals/');
-    /*
-    var protocol = (location.protocol === 'https') ? 'wss://' : 'ws://';
-    var socketURL = protocol + location.hostname + ((location.port)? (':' + location.port) : '') + '/terminals/';
-    */
     var endpoint = '/terminals?cols='+termOpts.cols+'&rows='+termOpts.rows;
 
     term = new Terminal({
@@ -80,8 +78,14 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', 'E
     term._initialized = true;
   };
 
-  var closeTerminal = function() {
-    console.log('close');
+  var closeTerminal = function(e, a) {
+    if (e.code !== CLOSE_CODE) {
+      console.log('close');
+      $scope.$emit('nof:on', {
+        title: 'Disconnected Server',
+        msg: 'Communication with the server has been disconnected'
+      });
+    }
   };
 
   var errorTerminal = function() {

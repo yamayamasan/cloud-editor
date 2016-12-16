@@ -2,9 +2,6 @@ var APP = angular.module('cloudeditor', ['ngRoute']);
 APP.config(['$routeProvider', function($router){
   $router.when('/', {
     redirectTo: 'editor'
-  }).when('/login', {
-    templateUrl: 'views/login.html',
-    controller: 'LoginCtrl'
   }).when('/filebrowser', {
     templateUrl: 'views/filebrowser.html',
     controller: 'FileBrowserCtrl'
