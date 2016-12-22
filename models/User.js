@@ -1,11 +1,14 @@
 'use strict';
 
-const Realm = require('realm');
+const _       = require('lodash');
+const Realm   = require('realm');
 const Uuid    = require('uuid');
 const bcrypt  = require('bcrypt');
 const schemas = require('../config/schema.json');
 const config  = require('../config/config.json');
-const session = require('../lib/session.js');
+const pokemon = require('../lib/pokemon.js');
+
+const jwtlib  = require('../lib/jwtlib.js');
 
 const NAME = 'User';
 function Model() {
@@ -20,8 +23,15 @@ Model.prototype.ext = function(cb) {
 };
 
 Model.prototype.add = function(uuid, name, password, email) {
-  const isUnique = this.isUniqueEmail(email);
+  const _this = this;
+  co(function *() {
+  const isUnique = _this.isUniqueEmail(email);
   if (!isUnique) return null;
+
+  if (name === null) {
+    const pk = yield pokemon.getRand();
+    name = pk.name;
+  }
 
   const time = new Date();
   const data = {
@@ -33,13 +43,12 @@ Model.prototype.add = function(uuid, name, password, email) {
     updated_at: time
   };
 
-  this.realm.write(() => {
-    this.realm.create(NAME, data);
+  _this.realm.write(() => {
+    _this.realm.create(NAME, data);
   });
 
-  const sessionKey = Uuid.v1();
-  session.insert(sessionKey, {uuid: uuid, name: name});
-  return sessionKey;
+  return jwtlib.sign(_.omit(data, 'password', 'created_at', 'updated_at'));
+  });
 };
 
 Model.prototype.login = function(password, email) {
@@ -49,9 +58,7 @@ Model.prototype.login = function(password, email) {
 
   const isAuth = compare(item.password);
   if (isAuth) {
-    const sessionKey = Uuid.v1();
-    session.insert(sessionKey, {uuid: item.uuid, name: item.name});
-    return sessionKey;
+    return jwtlib.sign(_.omit(item, 'password', 'created_at', 'updated_at'));
   }
   return null;
 };

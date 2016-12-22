@@ -7,6 +7,7 @@
     "pass": "pass"
   },
   "auth": {
+    "secret": "secretkey",
     "rounds": 15
   }
 }

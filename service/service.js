@@ -66,13 +66,7 @@ const allTerminalsPid = function *(pid, next) {
       console.error(ex);
     }
   });
-  let line = '';
   this.websocket.on('message', (msg) => {
-    if (msg.match(/[\r|\r\n]/)) {
-      line = '';
-    } else {
-      line = `${line}${msg}`;
-    }
     term.write(msg);
   });
   this.websocket.on('close', () => {
@@ -176,7 +170,7 @@ const getTree = function *(next){
 
 const postRegister = function *(next) {
   const params = this.request.body;
-  const token = user.add(Uuid.v4(), 'none', params.password, params.email);
+  const token = user.add(Uuid.v4(), null, params.password, params.email);
 
   this.body = JSON.stringify({
     'success': true,
