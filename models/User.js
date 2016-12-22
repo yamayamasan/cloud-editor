@@ -36,8 +36,6 @@ Model.prototype.add = function(uuid, name, password, email) {
   this.realm.write(() => {
     this.realm.create(NAME, data);
   });
-  
-  console.log(this.getUserByEmail(email));
 
   const sessionKey = Uuid.v1();
   session.insert(sessionKey, {uuid: uuid, name: name});
@@ -46,7 +44,7 @@ Model.prototype.add = function(uuid, name, password, email) {
 
 Model.prototype.login = function(password, email) {
   const items = this.getUserByEmail(email);
-  if (items.length <= 0) return null;
+  if (items.length <= 0) return false;
   const item = items[0];
 
   const isAuth = compare(item.password);

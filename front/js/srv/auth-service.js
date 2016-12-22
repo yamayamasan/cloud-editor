@@ -18,12 +18,13 @@ APP.service('AuthSrv', ['UtilSrv', 'LocalStorageSrv', function(UtilSrv, StorageS
           cb(res);
         });
       },
-      login: function(params){
+      login: function(params, cb){
         UtilSrv.http.post(url.login, params).then(function(res){
+          console.log(res.data);
           if (res.data.token !== null) {
-          StorageSrv.set('token', res.data.token);
+            StorageSrv.set('token', res.data.token);
           }
-          cb(null);
+          cb(res.data);
         });
       }
     };

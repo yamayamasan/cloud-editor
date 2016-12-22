@@ -30,9 +30,7 @@ APP.controller('LoginCtrl', ['$scope','$timeout', 'UtilSrv', 'AuthSrv', function
         AuthSrv.login({
           email: user.email,
           password: user.password
-        }, function(res) {
-          console.log(res);
-        });
+        }, toHome);
       }
     }
 

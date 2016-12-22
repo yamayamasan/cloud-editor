@@ -35,6 +35,7 @@
       "active": {"type": "bool", "optional": true},
       "email": {"type": "string"},
       "token": {"type": "string", "optional": true},
+      "live_token_date": {"type": "date", "optional": true},
       "is_delete": {"type": "bool", "default": false},
       "created_at": {"type": "date"},
       "updated_at": {"type": "date"},

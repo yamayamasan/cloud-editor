@@ -136,7 +136,7 @@ const postFilePath = function *(next){
         version: 1,
         created_at: time,
         updated_at: time
-        };
+      };
         // if (auther) data.auther = auther;
         if (lastItem && lastItem.version) data.version = lastItem.version + 1;
         _this.realm.write(() => {
@@ -189,10 +189,17 @@ const postLogin = function *(next) {
   const params = this.request.body;
   const token = user.login(params.password, params.email);
 
-  this.body = JSON.stringify({
-    'success': true,
-    'token': token,
-  });
+  console.log(token);
+  const res = {'success': null};
+  if (token === false) {
+    res.success = false;
+    res.message = 'Auth error';
+  } else {
+    res.success = true;
+    res.token   = token;
+  }
+
+  this.body = JSON.stringify(res);
   yield next;
 };
 

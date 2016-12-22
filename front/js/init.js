@@ -17,4 +17,8 @@ APP.config(['$routeProvider', function($router){
   }).otherwise({
     redirectTo: '/'
   });
+/*
+  var token = LocalStorageSrv.get('token');
+  if (token) $httpProvider.defaults.headers.common.Authorization = token;
+  */
 }]);
