@@ -1,6 +1,7 @@
 'use strict';
 
 const _       = require('lodash');
+const co      = require('co');
 const Realm   = require('realm');
 const Uuid    = require('uuid');
 const bcrypt  = require('bcrypt');
@@ -24,30 +25,30 @@ Model.prototype.ext = function(cb) {
 
 Model.prototype.add = function(uuid, name, password, email) {
   const _this = this;
-  co(function *() {
-  const isUnique = _this.isUniqueEmail(email);
-  if (!isUnique) return null;
+  return co(function *() {
+    const isUnique = _this.isUniqueEmail(email);
+    if (!isUnique) return null;
+/*
+    if (name === null) {
+      const pk = yield pokemon.getRand();
+      name = pk.name;
+    }
+*/
+    const time = new Date();
+    const data = {
+      uuid: uuid,
+      name: name,
+      password: hashed(password),
+      email: email,
+      created_at: time,
+      updated_at: time
+    };
 
-  if (name === null) {
-    const pk = yield pokemon.getRand();
-    name = pk.name;
-  }
+    _this.realm.write(() => {
+      _this.realm.create(NAME, data);
+    });
 
-  const time = new Date();
-  const data = {
-    uuid: uuid,
-    name: name,
-    password: hashed(password),
-    email: email,
-    created_at: time,
-    updated_at: time
-  };
-
-  _this.realm.write(() => {
-    _this.realm.create(NAME, data);
-  });
-
-  return jwtlib.sign(_.omit(data, 'password', 'created_at', 'updated_at'));
+    return jwtlib.sign(_.omit(data, 'password', 'created_at', 'updated_at'));
   });
 };
 

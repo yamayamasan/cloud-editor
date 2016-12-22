@@ -1,6 +1,7 @@
 'use strict';
 
 const _            = require('lodash');
+const co           = require('co');
 const fs           = require('fs');
 const fsExtra      = require('fs-extra');
 const Uuid         = require('uuid');
@@ -167,16 +168,31 @@ const getTree = function *(next){
   this.body = r;
   yield next;
 };
-
+/*
 const postRegister = function *(next) {
-  const params = this.request.body;
-  const token = user.add(Uuid.v4(), null, params.password, params.email);
+  const _this = this;
+  co(function *(){
+    const params = _this.request.body;
+    const token = yield user.add(Uuid.v4(), null, params.password, params.email);
 
-  this.body = JSON.stringify({
-    'success': true,
-    'token': token,
+    _this.body = JSON.stringify({
+      'success': true,
+      'token': token,
+    });
+    yield next;
   });
-  yield next;
+};
+*/
+const postRegister = function *(next) {
+
+    const params = this.request.body;
+    const token = yield user.add(Uuid.v4(), null, params.password, params.email);
+
+    this.body = JSON.stringify({
+      'success': true,
+      'token': token,
+    });
+    yield next;
 };
 
 const postLogin = function *(next) {

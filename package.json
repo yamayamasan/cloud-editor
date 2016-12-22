@@ -40,6 +40,7 @@
     "xterm": "^2.2.1"
   },
   "devDependencies": {
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "machinepack-javascript": "^3.0.1"
   }
 }
