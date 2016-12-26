@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "main.js",
   "license": "MIT",
+  "description": "Dependent on make, python, g++. node ver 6.1",
   "scripts": {
     "start": "pm2 start server.js --name 'cloud-editor'",
     "setup": "npm install && bower install ./front && npm -g install pm2",

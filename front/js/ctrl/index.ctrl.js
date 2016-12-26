@@ -1,6 +1,6 @@
 'use strict';
 
-APP.controller('IndexCtrl', ['$scope', '$timeout', 'UtilSrv', function($scope, $timeout, UtilSrv) {
+APP.controller('IndexCtrl', ['$scope', '$timeout', 'UtilSrv', 'AuthSrv', function($scope, $timeout, UtilSrv, AuthSrv) {
 
   $scope.nof = {
     title: null,
@@ -10,6 +10,9 @@ APP.controller('IndexCtrl', ['$scope', '$timeout', 'UtilSrv', function($scope, $
 
   $scope.init = function() {
     UtilSrv.set('index:height', $(window).height());
+    if (!AuthSrv.isAuthed()) {
+      location.href = '/login.html';
+    }
   };
 
   $scope.$on('load:file', function(e, a){
