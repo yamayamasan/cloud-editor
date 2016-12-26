@@ -16,3 +16,15 @@ or
 ```
 npm run setup
 ```
+
+# Start Server
+
+```
+node server.js
+```
+
+or 
+
+```
+npm start
+```
