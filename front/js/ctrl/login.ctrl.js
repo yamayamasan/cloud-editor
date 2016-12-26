@@ -20,7 +20,9 @@ APP.controller('LoginCtrl', ['$scope','$timeout', 'UtilSrv', 'AuthSrv', function
     };
 
     $scope.submit = function(user) {
-      var toHome = function(res) { location.href = '/'; };
+      var toHome = function(res) {
+        if (res.success === true) location.href = '/'; 
+      };
       if ($scope.isRegist) {
         AuthSrv.regist({
           email: user.email,

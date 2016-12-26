@@ -199,7 +199,7 @@ const postLogin = function *(next) {
   const params = this.request.body;
   const token = user.login(params.password, params.email);
 
-  console.log(token);
+  console.log('post:', token);
   const res = {'success': null};
   if (token === false) {
     res.success = false;

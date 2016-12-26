@@ -64,7 +64,7 @@ Model.prototype.login = function(password, email) {
   if (isAuth) {
     return jwtlib.sign(_.omit(item, 'password', 'created_at', 'updated_at'));
   }
-  return null;
+  return false;
 };
 
 Model.prototype.isUniqueEmail = function(email) {
