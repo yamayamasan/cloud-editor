@@ -4,14 +4,17 @@ const _       = require('lodash');
 const co      = require('co');
 const Realm   = require('realm');
 const Uuid    = require('uuid');
-const bcrypt  = require('bcrypt');
+// const bcrypt  = require('bcrypt');
 const schemas = require('../config/schema.json');
 const config  = require('../config/config.json');
 const pokemon = require('../lib/pokemon.js');
+const appCryp = require('../lib/appCrypto.js');
 
 const jwtlib  = require('../lib/jwtlib.js');
 
 const NAME = 'User';
+const HASH_ALGORITHM = 'aes-256-ctr';
+
 function Model() {
   this.realm = new Realm({
     path: 'db/user',
@@ -57,7 +60,7 @@ Model.prototype.login = function(password, email) {
   if (items.length <= 0) return false;
   const item = items[0];
 
-  const isAuth = compare(item.password);
+  const isAuth = compare(item.password, password);
   if (isAuth) {
     return jwtlib.sign(_.omit(item, 'password', 'created_at', 'updated_at'));
   }
@@ -77,6 +80,20 @@ Model.prototype.getUserByEmail = function(email) {
 
 const hashed = (text) => {
   try {
+    return appCryp.encode(text);
+  } catch(err) {
+    throw new Error(err);
+  }
+};
+
+const compare = (hash, text) => {
+  const isCompare = appCryp.compare(text, hash);
+  console.log('isCompare:', isCompare);
+  return isCompare;
+};
+
+const hashedBcrypt = (text) => {
+  try {
     const salt = bcrypt.genSaltSync(config.auth.rounds);
     const hash = bcrypt.hashSync(text, salt);
     return hash;
@@ -85,7 +102,7 @@ const hashed = (text) => {
   }
 };
 
-const compare = (text) => {
+const compareBcrypt = (text) => {
   const hash = hashed(text);
   return bcrypt.compareSync(text, hash);
 };
