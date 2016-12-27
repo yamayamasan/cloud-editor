@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html ng-app="cloud-editor">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Cloud Editor</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="./bower_components/AdminLTE/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="./bower_components/AdminLTE/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo" ng-cloak class="ng-cloak">
+    <!--
+    <a href="../../index2.html"><b>Admin</b>LTE</a>
+    -->
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body" ng-controller="LoginCtrl" ng-init="init()">
+    <p class="login-box-msg" >Sign in to start your session</p>
+
+    <form method="post" ng-submit="submit(user)">
+      <div class="form-group has-feedback">
+        <input type="email" class="form-control" placeholder="Email" ng-model="user.email">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" placeholder="Password" ng-model="user.password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback" ng-if="isRegist">
+        <input type="password" class="form-control" placeholder="Confirmation Password" ng-model="user.cfnpassword">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <!-- /.col -->
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+    <a href="#">I forgot my password</a><br>
+    <a href="#" class="text-center" ng-click="toggleForm()" ng-bind="formMsg"></a>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<script src="./bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="./bower_components/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
+<script src="js/ctrl/login.ctrl.js"></script>
+<script src="js/srv/localstorage-service.js"></script>
+<script src="js/srv/util-service.js"></script>
+<script src="js/srv/auth-service.js"></script>
+</body>
+</html>

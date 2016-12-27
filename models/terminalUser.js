@@ -36,6 +36,10 @@ Model.prototype.activeUsers = function(){
   return this.realm.objects(NAME).filtered(`active == true`);
 };
 
+Model.prototype.unActiveUsers = function(){
+  return this.realm.objects(NAME).filtered(`active == false`);
+};
+
 Model.prototype.termPid = function(pid){
   const item = this.realm.objects(NAME).filtered(`term_pid == "${pid}"`);
   if (item.length > 0) return item[0];
@@ -46,6 +50,17 @@ Model.prototype.unActive = function(user) {
   this.realm.write(() => {
     user.active = false;
     user.updated_at = new Date();
+  });
+};
+
+Model.prototype.unActives = function(users) {
+  this.realm.write(() => {
+    users.forEach((user) => {
+      if (user) {
+        user.active = false;
+        user.updated_at = new Date();
+      }
+    });
   });
 };
 

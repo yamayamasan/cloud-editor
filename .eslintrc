@@ -1,0 +1,41 @@
+{
+    "extends": "eslint:recommended",
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "rules": {
+        "node/exports-style": ["error", "module.exports"],
+        "node/no-deprecated-api": "error",
+        "node/no-missing-require": "error",
+        "semi": 2,
+        "arrow-parens": 2,
+        "arrow-spacing": 2,
+        "generator-star-spacing": 2,
+        "no-useless-constructor": 2,
+        "no-var": 2,
+        "prefer-arrow-callback": 2,
+        "prefer-const": 2,
+        "prefer-reflect": 2,
+        "prefer-rest-params": 2,
+        "prefer-spread": 2,
+        "prefer-template": 2,
+        "require-yield": 2,
+        "template-curly-spacing": 2,
+        "no-console": 0,
+        "yield-star-spacing": 2
+    },
+    "globals": {
+      "__loader": true,
+      "APP": true,
+      "APP_PATH": true,
+      "APP_CONFIG_PATH": true,
+      "co": true,
+      "moment": true,
+      "document": true,
+      "_": true,
+      "echarts": true,
+      "fs": true,
+      "$": true
+    }
+}

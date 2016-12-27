@@ -1,0 +1,25 @@
+
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
+}
+
+.skin-blue .sidebar a {
+  color: #2b2e33 !important;
+}
+
+.notification-box {}
+
+.notification-body {
+  position: fixed;
+  z-index: 1050;
+}
+
+#aside-terminal {
+  color: #fff;
+}
+

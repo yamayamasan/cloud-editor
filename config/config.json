@@ -1,4 +1,13 @@
 {
   "port": 8919,
-  "dir": "/"
+  "dir": "/*",
+  "home": null,
+  "basic": {
+    "name": "admin",
+    "pass": "pass"
+  },
+  "auth": {
+    "secret": "secretkey",
+    "rounds": 15
+  }
 }

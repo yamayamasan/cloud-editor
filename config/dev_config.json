@@ -1,0 +1,9 @@
+{
+  "port": 8919,
+  "dir": "/home/as-smt/Devs/src/electron/cloud-editor",
+  "home": null,
+  "basic": {
+    "name": "admin",
+    "pass": "pass"
+  }
+}

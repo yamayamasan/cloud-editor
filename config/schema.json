@@ -24,5 +24,22 @@
       "created_at": {"type": "date"},
       "updated_at": {"type": "date"}
     }
+  },
+  "User": {
+    "name": "User",
+    "primaryKey": "uuid",
+    "properties": {
+      "uuid": {"type": "string"},
+      "name": {"type": "string", "optional": true},
+      "password": {"type": "string", "optional": true},
+      "active": {"type": "bool", "optional": true},
+      "email": {"type": "string"},
+      "token": {"type": "string", "optional": true},
+      "live_token_date": {"type": "date", "optional": true},
+      "is_delete": {"type": "bool", "default": false},
+      "created_at": {"type": "date"},
+      "updated_at": {"type": "date"},
+      "deleted_at": {"type": "date", "optional": true}
+    }
   }
 }
