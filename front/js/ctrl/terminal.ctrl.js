@@ -26,8 +26,12 @@ APP.controller('TerminalCtrl', ['$scope','$timeout', '$rootScope', 'UtilSrv', 'E
   });
 
   $scope.init = function() {
-    createTerminal();
-    eventWs();
+    UtilSrv.http.get('/me').then((res) => {
+      if (res !== null) {
+        createTerminal();
+        eventWs();
+      }
+    });
   };
 
   var eventWs = function() {

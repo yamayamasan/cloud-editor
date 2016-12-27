@@ -214,7 +214,8 @@ const postLogin = function *(next) {
 };
 
 const getMe = function *(next) {
-
+  this.body = JSON.stringify({"success": true});
+  yield next;
 };
 
 const getEvent = function *(next) {

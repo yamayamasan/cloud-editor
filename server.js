@@ -37,7 +37,13 @@ app.use(function *(next){
   try {
     yield next;
   } catch(err) {
-    if (err.status == 401) {
+    console.log(err.status);
+    console.log(err.message);
+    if (err.status && err.message == 'JWT-ERROR') {
+      this.status = 401;
+      this.set('WWW-Authenticate', 'Bearer');
+      this.body = 'Unauthorized';
+    } else if (err.status == 401) {
       this.status = 401;
       this.set('WWW-Authenticate', 'Basic');
       this.body = 'Unauthorized';
