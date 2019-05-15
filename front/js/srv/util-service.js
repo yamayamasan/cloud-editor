@@ -55,7 +55,15 @@ APP.service('UtilSrv', ['$http', 'LocalStorageSrv', function($http, LocalStorage
           url: getApiPath(path),
           params: params
         };
-        return $http(setHeaderToken(config));
+        return $http(setHeaderToken(config)).then((res) => {
+          return res;
+        }, (res) => {
+          if (res.status === 401) {
+            location.href = "/login.html";
+            return null;
+          }
+          return res;
+        });
       },
       post: function(path, params) {
         var config = {
@@ -71,6 +79,7 @@ APP.service('UtilSrv', ['$http', 'LocalStorageSrv', function($http, LocalStorage
             return $.param(data); 
           }
         }
+        console.log(setHeaderToken(config));
         return $http(setHeaderToken(config));
       },
       getJson: function(path, cb) {

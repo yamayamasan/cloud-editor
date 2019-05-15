@@ -133,7 +133,7 @@ const postFilePath = function *(next){
         updated_at: time
       };
         // if (auther) data.auther = auther;
-        if (lastItem && lastItem.version) data.version = lastItem.version + 1;
+       if (lastItem && lastItem.version) data.version = lastItem.version + 1;
         _this.realm.write(() => {
           _this.realm.create('History', data);
 
@@ -168,38 +168,22 @@ const getTree = function *(next){
   this.body = r;
   yield next;
 };
-/*
-const postRegister = function *(next) {
-  const _this = this;
-  co(function *(){
-    const params = _this.request.body;
-    const token = yield user.add(Uuid.v4(), null, params.password, params.email);
 
-    _this.body = JSON.stringify({
-      'success': true,
-      'token': token,
-    });
-    yield next;
+const postRegister = function *(next) {
+  const params = this.request.body;
+  const token = yield user.add(Uuid.v4(), null, params.password, params.email);
+
+  this.body = JSON.stringify({
+    'success': true,
+    'token': token,
   });
-};
-*/
-const postRegister = function *(next) {
-
-    const params = this.request.body;
-    const token = yield user.add(Uuid.v4(), null, params.password, params.email);
-
-    this.body = JSON.stringify({
-      'success': true,
-      'token': token,
-    });
-    yield next;
+  yield next;
 };
 
 const postLogin = function *(next) {
   const params = this.request.body;
   const token = user.login(params.password, params.email);
 
-  console.log('post:', token);
   const res = {'success': null};
   if (token === false) {
     res.success = false;
@@ -214,7 +198,8 @@ const postLogin = function *(next) {
 };
 
 const getMe = function *(next) {
-
+  this.body = JSON.stringify({"success": true});
+  yield next;
 };
 
 const getEvent = function *(next) {
